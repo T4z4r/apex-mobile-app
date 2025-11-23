@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Theme
+import 'theme/app_theme.dart';
+
 // Providers
 import 'providers/auth_provider.dart';
 import 'providers/properties_provider.dart';
@@ -16,6 +19,7 @@ import 'providers/plans_provider.dart';
 // Screens
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
+import 'screens/navigation_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/units_screen.dart';
 import 'screens/properties_screen.dart';
@@ -53,10 +57,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Apex Property Management',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
       initialRoute: '/',
       routes: {
         '/': (context) => AuthWrapper(),
@@ -85,7 +86,7 @@ class AuthWrapper extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
 
     if (authProvider.token != null) {
-      return HomeScreen();
+      return NavigationScreen();
     } else {
       return LoginScreen();
     }

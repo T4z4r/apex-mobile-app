@@ -24,66 +24,55 @@ class _LeasesScreenState extends State<LeasesScreen> {
   Widget build(BuildContext context) {
     final leasesProvider = Provider.of<LeasesProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Leases'),
-      ),
-      body: leasesProvider.loading
-          ? Center(child: CircularProgressIndicator())
-          : leasesProvider.leases.isEmpty
-              ? Center(child: Text('No leases found'))
-              : ListView.builder(
-                  itemCount: leasesProvider.leases.length,
-                  itemBuilder: (ctx, i) {
-                    final lease = leasesProvider.leases[i];
-                    return Card(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: ListTile(
-                        title: Text('Lease #${lease.id}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Unit: ${lease.unit?.unitLabel ?? 'N/A'}'),
-                            Text('Tenant: ${lease.tenant?.name ?? 'N/A'}'),
-                            Text('Status: ${lease.status}'),
-                            Text('Period: ${lease.startDate.toLocal().toString().split(' ')[0]} - ${lease.endDate.toLocal().toString().split(' ')[0]}'),
-                          ],
-                        ),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              child: Text('View Details'),
-                              value: 'view',
-                            ),
-                            PopupMenuItem(
-                              child: Text('Sign Lease'),
-                              value: 'sign',
-                            ),
-                            PopupMenuItem(
-                              child: Text('Cancel'),
-                              value: 'cancel',
-                            ),
-                          ],
-                          onSelected: (value) {
-                            if (value == 'cancel') {
-                              _cancelLease(lease.id);
-                            }
-                          },
-                        ),
-                        onTap: () {
-                          // TODO: Navigate to lease detail
+    return leasesProvider.loading
+        ? Center(child: CircularProgressIndicator())
+        : leasesProvider.leases.isEmpty
+            ? Center(child: Text('No leases found'))
+            : ListView.builder(
+                itemCount: leasesProvider.leases.length,
+                itemBuilder: (ctx, i) {
+                  final lease = leasesProvider.leases[i];
+                  return Card(
+                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ListTile(
+                      title: Text('Lease #${lease.id}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Unit: ${lease.unit?.unitLabel ?? 'N/A'}'),
+                          Text('Tenant: ${lease.tenant?.name ?? 'N/A'}'),
+                          Text('Status: ${lease.status}'),
+                          Text('Period: ${lease.startDate.toLocal().toString().split(' ')[0]} - ${lease.endDate.toLocal().toString().split(' ')[0]}'),
+                        ],
+                      ),
+                      trailing: PopupMenuButton(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Text('View Details'),
+                            value: 'view',
+                          ),
+                          PopupMenuItem(
+                            child: Text('Sign Lease'),
+                            value: 'sign',
+                          ),
+                          PopupMenuItem(
+                            child: Text('Cancel'),
+                            value: 'cancel',
+                          ),
+                        ],
+                        onSelected: (value) {
+                          if (value == 'cancel') {
+                            _cancelLease(lease.id);
+                          }
                         },
                       ),
-                    );
-                  },
-                ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          // TODO: Navigate to request lease screen
-        },
-      ),
-    );
+                      onTap: () {
+                        // TODO: Navigate to lease detail
+                      },
+                    ),
+                  );
+                },
+              );
   }
 
   Future<void> _cancelLease(int id) async {

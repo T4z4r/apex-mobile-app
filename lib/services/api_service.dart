@@ -4,7 +4,13 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class ApiService {
-  final String baseUrl = "http://apex-backend.test//api";
+  // TODO: Update this URL to match your Laravel backend server
+  final String baseUrl =
+      "http://192.168.1.107:8000/api"; // For Android emulator
+  // For physical device or production, use your actual server IP/domain
+  // Examples:
+  // final String baseUrl = "http://192.168.1.100:8000/api"; // Local network IP
+  // final String baseUrl = "https://your-api-domain.com/api"; // Production domain
 
   // Helper method for headers
   Map<String, String> _getHeaders([String? token]) {
