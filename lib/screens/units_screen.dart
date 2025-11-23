@@ -21,8 +21,8 @@ class UnitsScreen extends StatelessWidget {
               itemBuilder: (ctx, i) {
                 final u = unitsProvider.units[i];
                 return ListTile(
-                  title: Text(u.label),
-                  subtitle: Text("Rent: ${u.rent}, Deposit: ${u.deposit}"),
+                  title: Text(u.unitLabel),
+                  subtitle: Text("Rent: ${u.rentAmount}, Deposit: ${u.depositAmount}"),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),
                     onPressed: () => unitsProvider.deleteUnit(token, u.id),
