@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Property {
   final int id;
   final String title;
@@ -28,6 +30,16 @@ class Property {
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
+    List<String>? amenitiesList;
+    if (json['amenities'] != null) {
+      if (json['amenities'] is String) {
+        // Parse JSON string
+        amenitiesList = List<String>.from(jsonDecode(json['amenities']));
+      } else if (json['amenities'] is List) {
+        amenitiesList = List<String>.from(json['amenities']);
+      }
+    }
+
     return Property(
       id: json['id'],
       title: json['title'],
@@ -36,7 +48,7 @@ class Property {
       neighborhood: json['neighborhood'],
       geoLat: json['geo_lat'] != null ? double.parse(json['geo_lat'].toString()) : null,
       geoLng: json['geo_lng'] != null ? double.parse(json['geo_lng'].toString()) : null,
-      amenities: json['amenities'] != null ? List<String>.from(json['amenities']) : null,
+      amenities: amenitiesList,
       landlordId: json['landlord_id'],
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
@@ -53,7 +65,7 @@ class Property {
       'neighborhood': neighborhood,
       'geo_lat': geoLat,
       'geo_lng': geoLng,
-      'amenities': amenities,
+      'amenities': amenities != null ? jsonEncode(amenities) : null,
       'landlord_id': landlordId,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
@@ -93,6 +105,16 @@ class Unit {
   });
 
   factory Unit.fromJson(Map<String, dynamic> json) {
+    List<String>? photosList;
+    if (json['photos'] != null) {
+      if (json['photos'] is String) {
+        // Parse JSON string
+        photosList = List<String>.from(jsonDecode(json['photos']));
+      } else if (json['photos'] is List) {
+        photosList = List<String>.from(json['photos']);
+      }
+    }
+
     return Unit(
       id: json['id'],
       propertyId: json['property_id'],
@@ -102,8 +124,8 @@ class Unit {
       sizeM2: json['size_m2'] != null ? double.parse(json['size_m2'].toString()) : null,
       rentAmount: double.parse(json['rent_amount'].toString()),
       depositAmount: double.parse(json['deposit_amount'].toString()),
-      isAvailable: json['is_available'] ?? true,
-      photos: json['photos'] != null ? List<String>.from(json['photos']) : null,
+      isAvailable: json['is_available'] == 1 || json['is_available'] == true,
+      photos: photosList,
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
     );
@@ -119,8 +141,8 @@ class Unit {
       'size_m2': sizeM2,
       'rent_amount': rentAmount,
       'deposit_amount': depositAmount,
-      'is_available': isAvailable,
-      'photos': photos,
+      'is_available': isAvailable ? 1 : 0,
+      'photos': photos != null ? jsonEncode(photos) : null,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
