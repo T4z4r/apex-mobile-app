@@ -21,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity, // <-- Ensures full-screen height
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -33,23 +35,35 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 40),
-                  _buildHeader(),
-                  const SizedBox(height: 60),
-                  _buildLoginForm(),
-                  const SizedBox(height: 32),
-                  _buildLoginButton(),
-                  const SizedBox(height: 16),
-                  _buildDivider(),
-                  const SizedBox(height: 16),
-                  _buildRegisterLink(),
-                ],
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // centers if short
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 40),
+                      _buildHeader(),
+                      const SizedBox(height: 60),
+                      _buildLoginForm(),
+                      const SizedBox(height: 32),
+                      _buildLoginButton(),
+                      const SizedBox(height: 16),
+                      _buildDivider(),
+                      const SizedBox(height: 16),
+                      _buildRegisterLink(),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -85,16 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
         Text(
           'Welcome Back',
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppTheme.textPrimaryColor,
-          ),
+                fontWeight: FontWeight.w700,
+                color: AppTheme.textPrimaryColor,
+              ),
         ),
         const SizedBox(height: 8),
         Text(
           'Sign in to your account',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: AppTheme.textSecondaryColor,
-          ),
+                color: AppTheme.textSecondaryColor,
+              ),
         ),
       ],
     );
@@ -125,7 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
           obscureText: _obscurePassword,
           prefixIcon: const Icon(Icons.lock_outline),
           suffixIcon: IconButton(
-            icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+            icon: Icon(
+                _obscurePassword ? Icons.visibility : Icons.visibility_off),
             onPressed: () {
               setState(() {
                 _obscurePassword = !_obscurePassword;
@@ -181,8 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
         Text(
           'Don\'t have an account? ',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.textSecondaryColor,
-          ),
+                color: AppTheme.textSecondaryColor,
+              ),
         ),
         GestureDetector(
           onTap: () {
@@ -191,9 +206,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Text(
             'Sign Up',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.primaryColor,
-              fontWeight: FontWeight.w600,
-            ),
+                  color: AppTheme.primaryColor,
+                  fontWeight: FontWeight.w600,
+                ),
           ),
         ),
       ],
@@ -215,9 +230,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (success) {
       Fluttertoast.showToast(msg: 'Login successful');
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/');
     } else {
-      Fluttertoast.showToast(msg: 'Login failed. Please check your credentials.');
+      Fluttertoast.showToast(
+          msg: 'Login failed. Please check your credentials.');
     }
   }
 
