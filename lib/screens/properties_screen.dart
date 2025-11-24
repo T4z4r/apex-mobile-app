@@ -5,6 +5,9 @@ import '../providers/auth_provider.dart';
 import '../models/property.dart';
 import '../theme/app_theme.dart';
 import '../components/modern_components.dart';
+import 'add_property_screen.dart';
+import 'edit_property_screen.dart';
+import 'property_details_screen.dart';
 
 class PropertiesScreen extends StatefulWidget {
   @override
@@ -18,7 +21,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
     if (token != null) {
-      Provider.of<PropertiesProvider>(context, listen: false).fetchProperties(token);
+      Provider.of<PropertiesProvider>(context, listen: false)
+          .fetchProperties(token);
     }
   }
 
@@ -37,11 +41,16 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
             child: EmptyState(
               icon: '🏢',
               title: 'No Properties Yet',
-              message: 'Start by adding your first property to manage your real estate portfolio.',
+              message:
+                  'Start by adding your first property to manage your real estate portfolio.',
               action: ModernButton(
                 text: 'Add Property',
                 onPressed: () {
-                  // TODO: Navigate to add property screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddPropertyScreen()),
+                  );
                 },
               ),
             ),
@@ -63,11 +72,15 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     );
   }
 
-
   Widget _buildPropertyCard(Property property) {
     return ModernCard(
       onTap: () {
-        // TODO: Navigate to property detail
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PropertyDetailsScreen(property: property),
+          ),
+        );
       },
       actions: [
         IconButton(
@@ -89,8 +102,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                     Text(
                       property.title,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                            fontWeight: FontWeight.w700,
+                          ),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -118,7 +131,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   gradient: AppTheme.successGradient,
                   borderRadius: BorderRadius.circular(20),
@@ -154,10 +168,11 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                       const SizedBox(height: 4),
                       Text(
                         '${property.units?.length ?? 0}',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimaryColor,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
                       ),
                       Text(
                         'Units',
@@ -177,10 +192,11 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                       const SizedBox(height: 4),
                       Text(
                         property.neighborhood,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimaryColor,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
                       ),
                       Text(
                         'Neighborhood',
@@ -200,10 +216,11 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                       const SizedBox(height: 4),
                       Text(
                         'Available',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimaryColor,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
                       ),
                       Text(
                         'Status',
@@ -222,7 +239,12 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                 child: ModernButton(
                   text: 'View Details',
                   onPressed: () {
-                    // TODO: Navigate to property detail
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PropertyDetailsScreen(property: property),
+                      ),
+                    );
                   },
                   isOutlined: true,
                   height: 40,
@@ -233,7 +255,13 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                 child: ModernButton(
                   text: 'Edit',
                   onPressed: () {
-                    // TODO: Navigate to edit property
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditPropertyScreen(property: property),
+                      ),
+                    );
                   },
                   height: 40,
                 ),
@@ -273,8 +301,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
             Text(
               'Property Actions',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+                    fontWeight: FontWeight.w700,
+                  ),
             ),
             const SizedBox(height: 20),
             _buildBottomSheetItem(
@@ -282,7 +310,12 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               title: 'View Details',
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Navigate to property detail
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PropertyDetailsScreen(property: property),
+                  ),
+                );
               },
             ),
             _buildBottomSheetItem(
@@ -290,7 +323,13 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               title: 'Edit Property',
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Navigate to edit property
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EditPropertyScreen(property: property),
+                  ),
+                );
               },
             ),
             _buildBottomSheetItem(
@@ -348,8 +387,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
         title: Text(
           'Delete Property',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+                fontWeight: FontWeight.w700,
+              ),
         ),
         content: Text(
           'Are you sure you want to delete "${property.title}"? This action cannot be undone.',
@@ -380,8 +419,9 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final token = authProvider.token;
     if (token != null) {
-      final success = await Provider.of<PropertiesProvider>(context, listen: false)
-          .deleteProperty(token, id);
+      final success =
+          await Provider.of<PropertiesProvider>(context, listen: false)
+              .deleteProperty(token, id);
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
