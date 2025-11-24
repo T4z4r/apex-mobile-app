@@ -5,6 +5,9 @@ import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../components/modern_components.dart';
 import '../models/unit.dart';
+import 'add_unit_screen.dart';
+import 'edit_unit_screen.dart';
+import 'unit_details_screen.dart';
 
 class UnitsScreen extends StatefulWidget {
   @override
@@ -26,160 +29,351 @@ class _UnitsScreenState extends State<UnitsScreen> {
   Widget build(BuildContext context) {
     final unitsProvider = Provider.of<UnitsProvider>(context);
 
-    return CustomScrollView(
-      slivers: [
-        if (unitsProvider.loading)
-          const SliverFillRemaining(
-            child: LoadingState(message: 'Loading units...'),
-          )
-        else if (unitsProvider.units.isEmpty)
-          SliverFillRemaining(
-            child: EmptyState(
-              icon: '🏠',
-              title: 'No Units Yet',
-              message: 'Add your first unit to start managing your property inventory.',
-              action: ModernButton(
-                text: 'Add Unit',
-                onPressed: () {
-                  // TODO: Navigate to add unit screen
-                },
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          if (unitsProvider.loading)
+            const SliverFillRemaining(
+              child: LoadingState(message: 'Loading units...'),
+            )
+          else if (unitsProvider.units.isEmpty)
+            SliverFillRemaining(
+              child: EmptyState(
+                icon: '🏠',
+                title: 'No Units Yet',
+                message:
+                    'Add your first unit to start managing your property inventory.',
+                action: ModernButton(
+                  text: 'Add Unit',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddUnitScreen()),
+                    );
+                  },
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(2),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final unit = unitsProvider.units[index];
+                    return _buildUnitCard(unit);
+                  },
+                  childCount: unitsProvider.units.length,
+                ),
               ),
             ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.85,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final unit = unitsProvider.units[index];
-                  return _buildUnitCard(unit);
-                },
-                childCount: unitsProvider.units.length,
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
+      floatingActionButton: unitsProvider.units.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddUnitScreen()),
+                );
+              },
+              backgroundColor: AppTheme.primaryColor,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
-
   Widget _buildUnitCard(Unit unit) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: () {
-          // TODO: Navigate to unit detail
-        },
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return ModernCard(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UnitDetailsScreen(unit: unit),
+          ),
+        );
+      },
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.more_vert, size: 20),
+          onPressed: () {
+            _showUnitOptions(unit);
+          },
+        ),
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      unit.unitLabel,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                     ),
-                    child: Icon(
-                      Icons.apartment,
-                      color: AppTheme.primaryColor,
-                      size: 20,
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.home_outlined,
+                          size: 16,
+                          color: AppTheme.textSecondaryColor,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${unit.bedrooms} bed, ${unit.bathrooms} bath',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.textSecondaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const Spacer(),
-                  PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: const Text('View Details'),
-                        value: 'view',
-                      ),
-                      PopupMenuItem(
-                        child: const Text('Edit'),
-                        value: 'edit',
-                      ),
-                      PopupMenuItem(
-                        child: const Text('Delete', style: TextStyle(color: AppTheme.errorColor)),
-                        value: 'delete',
-                      ),
-                    ],
-                    onSelected: (value) {
-                      if (value == 'delete') {
-                        _showDeleteConfirmation(unit);
-                      }
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                unit.unitLabel,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
+                  ],
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
-              _buildUnitInfo(Icons.payments, 'Rent', '\$${unit.rentAmount.toStringAsFixed(2)}'),
-              const SizedBox(height: 6),
-              _buildUnitInfo(Icons.account_balance, 'Deposit', '\$${unit.depositAmount.toStringAsFixed(2)}'),
-              const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppTheme.successColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  gradient: unit.isAvailable
+                      ? AppTheme.successGradient
+                      : AppTheme.errorGradient,
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  'Available',
-                  style: TextStyle(
-                    color: AppTheme.successColor,
-                    fontSize: 10,
+                  unit.isAvailable ? 'Available' : 'Occupied',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.attach_money,
+                        color: AppTheme.primaryColor,
+                        size: 24,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'KES ${unit.rentAmount.toStringAsFixed(0)}',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
+                      ),
+                      Text(
+                        'Rent',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.account_balance_wallet,
+                        color: AppTheme.secondaryColor,
+                        size: 24,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'KES ${unit.depositAmount.toStringAsFixed(0)}',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
+                      ),
+                      Text(
+                        'Deposit',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.square_foot,
+                        color: AppTheme.accentColor,
+                        size: 24,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        unit.sizeM2?.toStringAsFixed(0) ?? 'N/A',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.textPrimaryColor,
+                                ),
+                      ),
+                      Text(
+                        'm²',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: ModernButton(
+                  text: 'View Details',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UnitDetailsScreen(unit: unit),
+                      ),
+                    );
+                  },
+                  isOutlined: true,
+                  height: 40,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ModernButton(
+                  text: 'Edit',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditUnitScreen(unit: unit),
+                      ),
+                    );
+                  },
+                  height: 40,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUnitOptions(Unit unit) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.dividerColor,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Unit Actions',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            const SizedBox(height: 20),
+            _buildBottomSheetItem(
+              icon: Icons.visibility,
+              title: 'View Details',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UnitDetailsScreen(unit: unit),
+                  ),
+                );
+              },
+            ),
+            _buildBottomSheetItem(
+              icon: Icons.edit,
+              title: 'Edit Unit',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditUnitScreen(unit: unit),
+                  ),
+                );
+              },
+            ),
+            _buildBottomSheetItem(
+              icon: Icons.delete,
+              title: 'Delete Unit',
+              color: AppTheme.errorColor,
+              onTap: () {
+                Navigator.pop(context);
+                _showDeleteConfirmation(unit);
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildUnitInfo(IconData icon, String label, String value) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 14,
-          color: AppTheme.textSecondaryColor,
+  Widget _buildBottomSheetItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    Color? color,
+  }) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: color ?? AppTheme.textPrimaryColor,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: color ?? AppTheme.textPrimaryColor,
+          fontWeight: FontWeight.w500,
         ),
-        const SizedBox(width: 4),
-        Expanded(
-          child: Text(
-            '$label: $value',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppTheme.textSecondaryColor,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
+      ),
+      onTap: onTap,
     );
   }
 
@@ -193,8 +387,8 @@ class _UnitsScreenState extends State<UnitsScreen> {
         title: Text(
           'Delete Unit',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+                fontWeight: FontWeight.w700,
+              ),
         ),
         content: Text(
           'Are you sure you want to delete unit "${unit.unitLabel}"? This action cannot be undone.',
