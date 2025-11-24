@@ -30,45 +30,59 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   Widget build(BuildContext context) {
     final propertiesProvider = Provider.of<PropertiesProvider>(context);
 
-    return CustomScrollView(
-      slivers: [
-        if (propertiesProvider.loading)
-          const SliverFillRemaining(
-            child: LoadingState(message: 'Loading properties...'),
-          )
-        else if (propertiesProvider.properties.isEmpty)
-          SliverFillRemaining(
-            child: EmptyState(
-              icon: '🏢',
-              title: 'No Properties Yet',
-              message:
-                  'Start by adding your first property to manage your real estate portfolio.',
-              action: ModernButton(
-                text: 'Add Property',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddPropertyScreen()),
-                  );
-                },
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          if (propertiesProvider.loading)
+            const SliverFillRemaining(
+              child: LoadingState(message: 'Loading properties...'),
+            )
+          else if (propertiesProvider.properties.isEmpty)
+            SliverFillRemaining(
+              child: EmptyState(
+                icon: '🏢',
+                title: 'No Properties Yet',
+                message:
+                    'Start by adding your first property to manage your real estate portfolio.',
+                action: ModernButton(
+                  text: 'Add Property',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddPropertyScreen()),
+                    );
+                  },
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final property = propertiesProvider.properties[index];
+                    return _buildPropertyCard(property);
+                  },
+                  childCount: propertiesProvider.properties.length,
+                ),
               ),
             ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final property = propertiesProvider.properties[index];
-                  return _buildPropertyCard(property);
-                },
-                childCount: propertiesProvider.properties.length,
-              ),
-            ),
-          ),
-      ],
+        ],
+      ),
+      floatingActionButton: propertiesProvider.properties.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddPropertyScreen()),
+                );
+              },
+              backgroundColor: AppTheme.primaryColor,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
