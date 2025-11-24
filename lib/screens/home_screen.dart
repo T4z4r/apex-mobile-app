@@ -69,11 +69,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       opacity: _fadeAnimation,
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
           // HERO HEADER
           SliverToBoxAdapter(child: _buildHeroHeader(auth)),
-          SliverToBoxAdapter(child: const SizedBox(height: 20)),
+          SliverToBoxAdapter(child: const SizedBox(height: 12)),
 
           // STATS
           SliverToBoxAdapter(
@@ -85,20 +85,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
           // ACTIVITY
           SliverToBoxAdapter(child: _buildNewActivity()),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
           // QUICK ACTIONS
           SliverToBoxAdapter(child: _buildNewQuickActions()),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 40)),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
+ 
   }
 
   // ---------------------------------------------------------------------------

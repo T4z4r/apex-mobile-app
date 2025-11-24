@@ -58,7 +58,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
             )
           else
             SliverPadding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(2),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -256,7 +256,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PropertyDetailsScreen(property: property),
+                        builder: (context) =>
+                            PropertyDetailsScreen(property: property),
                       ),
                     );
                   },
@@ -327,7 +328,8 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PropertyDetailsScreen(property: property),
+                    builder: (context) =>
+                        PropertyDetailsScreen(property: property),
                   ),
                 );
               },
