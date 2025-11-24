@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Apex Property Management',
       theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => AuthWrapper(),
