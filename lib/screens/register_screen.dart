@@ -22,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
-  final List<String> _roles = ['tenant', 'landlord', 'agent', 'admin'];
+  final List<String> _roles = ['tenant', 'landlord', 'agent'];
 
   @override
   Widget build(BuildContext context) {
