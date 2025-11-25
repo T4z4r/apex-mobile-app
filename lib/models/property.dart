@@ -86,8 +86,10 @@ class Unit {
   final double depositAmount;
   final bool isAvailable;
   final List<String>? photos;
+  final int? tenantId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final Property? property;
 
   Unit({
     required this.id,
@@ -100,8 +102,10 @@ class Unit {
     required this.depositAmount,
     required this.isAvailable,
     this.photos,
+    this.tenantId,
     this.createdAt,
     this.updatedAt,
+    this.property,
   });
 
   factory Unit.fromJson(Map<String, dynamic> json) {
@@ -126,8 +130,10 @@ class Unit {
       depositAmount: double.parse(json['deposit_amount'].toString()),
       isAvailable: json['is_available'] == 1 || json['is_available'] == true,
       photos: photosList,
+      tenantId: json['tenant_id'],
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      property: json['property'] != null ? Property.fromJson(json['property']) : null,
     );
   }
 
@@ -143,8 +149,10 @@ class Unit {
       'deposit_amount': depositAmount,
       'is_available': isAvailable ? 1 : 0,
       'photos': photos != null ? jsonEncode(photos) : null,
+      'tenant_id': tenantId,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+      'property': property?.toJson(),
     };
   }
 }
