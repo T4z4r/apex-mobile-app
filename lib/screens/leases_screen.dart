@@ -5,6 +5,8 @@ import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../components/modern_components.dart';
 import '../models/lease.dart';
+import 'add_lease_screen.dart';
+import 'lease_details_screen.dart';
 
 class LeasesScreen extends StatefulWidget {
   @override
@@ -39,7 +41,16 @@ class _LeasesScreenState extends State<LeasesScreen> {
                 icon: '📄',
                 title: 'No Leases Yet',
                 message:
-                    'Lease agreements will appear here once tenants sign them.',
+                    'Create your first lease agreement to get started.',
+                action: ModernButton(
+                  text: 'Add Lease',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddLeaseScreen()),
+                    );
+                  },
+                ),
               ),
             )
           else
@@ -57,6 +68,18 @@ class _LeasesScreenState extends State<LeasesScreen> {
             ),
         ],
       ),
+      floatingActionButton: leasesProvider.leases.isNotEmpty
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddLeaseScreen()),
+                );
+              },
+              backgroundColor: AppTheme.primaryColor,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
@@ -218,7 +241,12 @@ class _LeasesScreenState extends State<LeasesScreen> {
                 child: ModernButton(
                   text: 'View Details',
                   onPressed: () {
-                    // TODO: Navigate to lease details screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LeaseDetailsScreen(lease: lease),
+                      ),
+                    );
                   },
                   isOutlined: true,
                   height: 40,
@@ -324,7 +352,12 @@ class _LeasesScreenState extends State<LeasesScreen> {
               title: 'View Details',
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Navigate to lease details screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LeaseDetailsScreen(lease: lease),
+                  ),
+                );
               },
             ),
             if (lease.status == 'pending')
