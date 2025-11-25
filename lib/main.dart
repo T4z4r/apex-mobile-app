@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Theme
 import 'theme/app_theme.dart';
@@ -19,7 +18,9 @@ import 'providers/plans_provider.dart';
 // Screens
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
-import 'screens/navigation_screen.dart';
+import 'screens/tenant_navigation_screen.dart';
+import 'screens/landlord_navigation_screen.dart';
+import 'screens/agent_navigation_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/units_screen.dart';
 import 'screens/properties_screen.dart';
@@ -87,7 +88,19 @@ class AuthWrapper extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
 
     if (authProvider.token != null) {
-      return NavigationScreen();
+      // Route based on user role
+      final userRole = authProvider.userRole ?? 'tenant';
+
+      switch (userRole.toLowerCase()) {
+        case 'tenant':
+          return TenantNavigationScreen();
+        case 'landlord':
+          return LandlordNavigationScreen();
+        case 'agent':
+          return AgentNavigationScreen();
+        default:
+          return TenantNavigationScreen(); // Default fallback
+      }
     } else {
       return LoginScreen();
     }
