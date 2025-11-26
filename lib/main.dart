@@ -14,6 +14,8 @@ import 'providers/agents_provider.dart';
 import 'providers/disputes_provider.dart';
 import 'providers/conversations_provider.dart';
 import 'providers/plans_provider.dart';
+import 'providers/admin_provider.dart';
+import 'providers/roles_provider.dart';
 
 // Screens
 import 'screens/login_screen.dart';
@@ -46,6 +48,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DisputesProvider()),
         ChangeNotifierProvider(create: (_) => ConversationsProvider()),
         ChangeNotifierProvider(create: (_) => PlansProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => RolesProvider()),
       ],
       child: const MyApp(),
     ),

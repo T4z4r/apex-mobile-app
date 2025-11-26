@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
+import 'admin_dashboard_screen.dart';
+import 'admin_users_screen.dart';
+import 'admin_disputes_screen.dart';
+import 'admin_agents_screen.dart';
+import 'admin_plans_screen.dart';
 
 class AdminNavigationScreen extends StatefulWidget {
   @override
@@ -12,11 +17,11 @@ class _AdminNavigationScreenState extends State<AdminNavigationScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _screens = [
-    _AdminDashboardScreen(),
-    _AdminUsersScreen(),
-    _AdminDisputesScreen(),
-    _AdminAgentsScreen(),
-    _AdminPlansScreen(),
+    AdminDashboardScreen(),
+    AdminUsersScreen(),
+    AdminDisputesScreen(),
+    AdminAgentsScreen(),
+    AdminPlansScreen(),
   ];
 
   static final List<String> _titles = [
@@ -380,52 +385,6 @@ class _AdminNavigationScreenState extends State<AdminNavigationScreen> {
       ),
       tileColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    );
-  }
-}
-
-// Placeholder screens for admin management
-class _AdminDashboardScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Admin Dashboard - Coming Soon'),
-    );
-  }
-}
-
-class _AdminUsersScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Manage Users - Coming Soon'),
-    );
-  }
-}
-
-class _AdminDisputesScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Manage Disputes - Coming Soon'),
-    );
-  }
-}
-
-class _AdminAgentsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Manage Agents - Coming Soon'),
-    );
-  }
-}
-
-class _AdminPlansScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Manage Plans - Coming Soon'),
     );
   }
 }

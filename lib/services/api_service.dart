@@ -465,4 +465,345 @@ class ApiService {
     await http.delete(Uri.parse("$baseUrl/$endpoint"),
         headers: _getHeaders(token));
   }
+
+  // Admin API Methods
+
+  // Dashboard
+  Future<Map<String, dynamic>> getAdminDashboardOverview(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/dashboard/overview"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminDashboardAnalytics(String token, {int period = 30}) async {
+    final uri = Uri.parse("$baseUrl/admin/dashboard/analytics").replace(queryParameters: {'period': period.toString()});
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<List<dynamic>> getAdminDashboardRecentActivity(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/dashboard/recent-activity"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<List<dynamic>> getAdminDashboardTenants(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/dashboard/tenants"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  // User Management
+  Future<List<dynamic>> getAdminUsers(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/users").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> createAdminUser(String token, Map<String, dynamic> data) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/users"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminUser(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/users/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminUser(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/users/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminUser(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/users/$id"),
+        headers: _getHeaders(token));
+  }
+
+  Future<Map<String, dynamic>> assignRoleToUser(String token, int userId, String role) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/users/$userId/assign-role"),
+        headers: _getHeaders(token),
+        body: {"role": role});
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> removeRoleFromUser(String token, int userId, String role) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/users/$userId/remove-role"),
+        headers: _getHeaders(token),
+        body: {"role": role});
+    return json.decode(response.body);
+  }
+
+  // Role Management
+  Future<List<dynamic>> getAdminRoles(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/roles"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> createAdminRole(String token, Map<String, dynamic> data) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/roles"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminRole(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/roles/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminRole(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/roles/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminRole(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/roles/$id"),
+        headers: _getHeaders(token));
+  }
+
+  // Permission Management
+  Future<List<dynamic>> getAdminPermissions(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/permissions"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> createAdminPermission(String token, Map<String, dynamic> data) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/permissions"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminPermission(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/permissions/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminPermission(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/permissions/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminPermission(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/permissions/$id"),
+        headers: _getHeaders(token));
+  }
+
+  // Tenant Management
+  Future<List<dynamic>> getAdminTenants(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/tenants").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> createAdminTenant(String token, Map<String, dynamic> data) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/tenants"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminTenant(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/tenants/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminTenant(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/tenants/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminTenant(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/tenants/$id"),
+        headers: _getHeaders(token));
+  }
+
+  Future<Map<String, dynamic>> getAdminTenantStats(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/tenants/$id/stats"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  // Payment Management
+  Future<List<dynamic>> getAdminPayments(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/payments").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminPayment(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/payments/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminPayment(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/payments/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminPaymentStats(String token, {int? tenantId}) async {
+    final query = tenantId != null ? {'tenant_id': tenantId.toString()} : null;
+    final uri = Uri.parse("$baseUrl/admin/payments/stats").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  // Agent Management
+  Future<List<dynamic>> getAdminAgents(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/agents").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminAgent(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/agents/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminAgent(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/agents/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminAgent(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/agents/$id"),
+        headers: _getHeaders(token));
+  }
+
+  Future<Map<String, dynamic>> verifyAdminAgent(String token, int id) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/agents/$id/verify"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> unverifyAdminAgent(String token, int id) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/agents/$id/unverify"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminAgentStats(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/agents/stats"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  // Dispute Management
+  Future<List<dynamic>> getAdminDisputes(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/disputes").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminDispute(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/disputes/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminDispute(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/disputes/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> assignAdminDispute(String token, int id, int adminId) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/disputes/$id/assign"),
+        headers: _getHeaders(token),
+        body: {"admin_id": adminId.toString()});
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> bulkUpdateAdminDisputes(String token, List<int> disputeIds, String status, {String? notes}) async {
+    final data = {
+      "dispute_ids": disputeIds,
+      "status": status,
+      if (notes != null) "admin_resolution_notes": notes,
+    };
+    final response = await http.post(Uri.parse("$baseUrl/admin/disputes/bulk-update"),
+        headers: _getHeaders(token),
+        body: json.encode(data));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminDisputeStats(String token, {int? tenantId}) async {
+    final query = tenantId != null ? {'tenant_id': tenantId.toString()} : null;
+    final uri = Uri.parse("$baseUrl/admin/disputes/stats").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  // Plan Management
+  Future<List<dynamic>> getAdminPlans(String token, {Map<String, String>? query}) async {
+    final uri = Uri.parse("$baseUrl/admin/plans").replace(queryParameters: query);
+    final response = await http.get(uri, headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> createAdminPlan(String token, Map<String, dynamic> data) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/plans"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminPlan(String token, int id) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/plans/$id"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> updateAdminPlan(String token, int id, Map<String, dynamic> data) async {
+    final response = await http.put(Uri.parse("$baseUrl/admin/plans/$id"),
+        headers: _getHeaders(token),
+        body: data.map((key, value) => MapEntry(key, value.toString())));
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteAdminPlan(String token, int id) async {
+    await http.delete(Uri.parse("$baseUrl/admin/plans/$id"),
+        headers: _getHeaders(token));
+  }
+
+  Future<Map<String, dynamic>> toggleAdminPlan(String token, int id) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/plans/$id/toggle"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> duplicateAdminPlan(String token, int id) async {
+    final response = await http.post(Uri.parse("$baseUrl/admin/plans/$id/duplicate"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> getAdminPlanStats(String token) async {
+    final response = await http.get(Uri.parse("$baseUrl/admin/plans/stats"),
+        headers: _getHeaders(token));
+    return json.decode(response.body);
+  }
 }
