@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/admin_provider.dart';
 import '../providers/auth_provider.dart';
+import '../services/api_service.dart';
 import '../theme/app_theme.dart';
 import '../components/modern_components.dart';
 
@@ -61,6 +62,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     // Tenants Overview
                     if (adminProvider.tenants != null)
                       _buildTenantsSection(adminProvider.tenants!),
+
+                    const SizedBox(height: 32),
+
+                    // Additional Analytics Sections
+                    _buildDetailedAnalyticsSections(),
                   ],
                 ),
               ),
@@ -365,6 +371,352 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildDetailedAnalyticsSections() {
+    return Column(
+      children: [
+        // Dispute Statistics
+        _buildDisputeStatsSection(),
+
+        const SizedBox(height: 32),
+
+        // Agent Statistics
+        _buildAgentStatsSection(),
+
+        const SizedBox(height: 32),
+
+        // Plan Statistics
+        _buildPlanStatsSection(),
+
+        const SizedBox(height: 32),
+
+        // Payment Statistics
+        _buildPaymentStatsSection(),
+      ],
+    );
+  }
+
+  Widget _buildDisputeStatsSection() {
+    return FutureBuilder(
+      future: _loadDisputeStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        final stats = snapshot.data as Map<String, dynamic>?;
+        if (stats == null) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Dispute Statistics',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimaryColor,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.report_problem,
+                    title: 'Total Disputes',
+                    value: stats['total_disputes']?.toString() ?? '0',
+                    color: AppTheme.errorColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.check_circle,
+                    title: 'Resolved',
+                    value: stats['resolved_disputes']?.toString() ?? '0',
+                    color: AppTheme.successColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.pending,
+                    title: 'Open',
+                    value: stats['open_disputes']?.toString() ?? '0',
+                    color: AppTheme.warningColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildAgentStatsSection() {
+    return FutureBuilder(
+      future: _loadAgentStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        final stats = snapshot.data as Map<String, dynamic>?;
+        if (stats == null) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Agent Statistics',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimaryColor,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.verified,
+                    title: 'Verified Agents',
+                    value: stats['verified_agents']?.toString() ?? '0',
+                    color: AppTheme.successColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.pending,
+                    title: 'Pending Verification',
+                    value: stats['pending_verification']?.toString() ?? '0',
+                    color: AppTheme.warningColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.percent,
+                    title: 'Avg Commission',
+                    value: '${stats['avg_commission_rate']?.toStringAsFixed(1) ?? '0'}%',
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildPlanStatsSection() {
+    return FutureBuilder(
+      future: _loadPlanStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        final stats = snapshot.data as Map<String, dynamic>?;
+        if (stats == null) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Plan Statistics',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimaryColor,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.inventory,
+                    title: 'Active Plans',
+                    value: stats['active_plans']?.toString() ?? '0',
+                    color: AppTheme.successColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.subscriptions,
+                    title: 'Active Subscriptions',
+                    value: stats['active_subscriptions']?.toString() ?? '0',
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.attach_money,
+                    title: 'Total Revenue',
+                    value: 'KES ${stats['total_revenue']?.toStringAsFixed(0) ?? '0'}',
+                    color: AppTheme.accentColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildPaymentStatsSection() {
+    return FutureBuilder(
+      future: _loadPaymentStats(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        final stats = snapshot.data as Map<String, dynamic>?;
+        if (stats == null) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Payment Statistics',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textPrimaryColor,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.payment,
+                    title: 'Total Payments',
+                    value: stats['total_payments']?.toString() ?? '0',
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.check_circle,
+                    title: 'Completed',
+                    value: stats['completed_payments']?.toString() ?? '0',
+                    color: AppTheme.successColor,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildStatsCard(
+                    icon: Icons.attach_money,
+                    title: 'Total Amount',
+                    value: 'KES ${stats['total_amount']?.toStringAsFixed(0) ?? '0'}',
+                    color: AppTheme.accentColor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildStatsCard({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppTheme.textSecondaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>?> _loadDisputeStats() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final token = authProvider.token;
+    if (token == null) return null;
+
+    try {
+      final ApiService apiService = ApiService();
+      return await apiService.getAdminDisputeStats(token);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> _loadAgentStats() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final token = authProvider.token;
+    if (token == null) return null;
+
+    try {
+      final ApiService apiService = ApiService();
+      return await apiService.getAdminAgentStats(token);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> _loadPlanStats() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final token = authProvider.token;
+    if (token == null) return null;
+
+    try {
+      final ApiService apiService = ApiService();
+      return await apiService.getAdminPlanStats(token);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> _loadPaymentStats() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final token = authProvider.token;
+    if (token == null) return null;
+
+    try {
+      final ApiService apiService = ApiService();
+      return await apiService.getAdminPaymentStats(token);
+    } catch (e) {
+      return null;
+    }
   }
 
   IconData _getActivityIcon(String? type) {
