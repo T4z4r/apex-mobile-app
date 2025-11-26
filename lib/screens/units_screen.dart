@@ -127,7 +127,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '${unit.bedrooms} bed, ${unit.bathrooms} bath',
+                          '${unit.bedrooms ?? 'N/A'} bed, ${unit.bathrooms ?? 'N/A'} bath',
                           style: TextStyle(
                             fontSize: 14,
                             color: AppTheme.textSecondaryColor,
@@ -201,7 +201,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'KES ${unit.depositAmount.toStringAsFixed(0)}',
+                        unit.depositAmount != null ? 'KES ${unit.depositAmount!.toStringAsFixed(0)}' : 'N/A',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,

@@ -114,10 +114,7 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _bedroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (int.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -132,10 +129,7 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _bathroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (int.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -161,10 +155,7 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _rentAmountController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (double.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && double.tryParse(value) == null) {
                             return 'Invalid amount';
                           }
                           return null;
@@ -263,11 +254,11 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
 
     final unitData = {
       'unit_label': _unitLabelController.text,
-      'bedrooms': int.parse(_bedroomsController.text),
-      'bathrooms': int.parse(_bathroomsController.text),
+      'bedrooms': _bedroomsController.text.isNotEmpty ? int.parse(_bedroomsController.text) : null,
+      'bathrooms': _bathroomsController.text.isNotEmpty ? int.parse(_bathroomsController.text) : null,
       'size_m2': _sizeM2Controller.text.isNotEmpty ? double.parse(_sizeM2Controller.text) : null,
       'rent_amount': double.parse(_rentAmountController.text),
-      'deposit_amount': double.parse(_depositAmountController.text),
+      'deposit_amount': _depositAmountController.text.isNotEmpty ? double.parse(_depositAmountController.text) : null,
       'is_available': _isAvailable ? 1 : 0,
       'photos': photos,
     };

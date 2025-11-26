@@ -292,7 +292,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             ),
                             title: Text(unit.unitLabel),
                             subtitle: Text(
-                                '${unit.bedrooms} bed, ${unit.bathrooms} bath'),
+                                '${unit.bedrooms ?? 'N/A'} bed, ${unit.bathrooms ?? 'N/A'} bath'),
                             trailing: Text(
                               'KES ${unit.rentAmount.toStringAsFixed(0)}',
                               style: TextStyle(

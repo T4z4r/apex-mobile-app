@@ -31,11 +31,11 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
   void initState() {
     super.initState();
     _unitLabelController = TextEditingController(text: widget.unit.unitLabel);
-    _bedroomsController = TextEditingController(text: widget.unit.bedrooms.toString());
-    _bathroomsController = TextEditingController(text: widget.unit.bathrooms.toString());
+    _bedroomsController = TextEditingController(text: widget.unit.bedrooms?.toString());
+    _bathroomsController = TextEditingController(text: widget.unit.bathrooms?.toString());
     _sizeM2Controller = TextEditingController(text: widget.unit.sizeM2?.toString());
     _rentAmountController = TextEditingController(text: widget.unit.rentAmount.toString());
-    _depositAmountController = TextEditingController(text: widget.unit.depositAmount.toString());
+    _depositAmountController = TextEditingController(text: widget.unit.depositAmount?.toString());
     _photosController = TextEditingController(text: widget.unit.photos?.join(', '));
     _isAvailable = widget.unit.isAvailable;
   }
@@ -78,10 +78,7 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
                         controller: _bedroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (int.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -96,10 +93,7 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
                         controller: _bathroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (int.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -143,10 +137,7 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
                         controller: _depositAmountController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (double.tryParse(value) == null) {
+                          if (value != null && value.isNotEmpty && double.tryParse(value) == null) {
                             return 'Invalid amount';
                           }
                           return null;
@@ -226,11 +217,11 @@ class _EditUnitScreenState extends State<EditUnitScreen> {
 
     final unitData = {
       'unit_label': _unitLabelController.text,
-      'bedrooms': int.parse(_bedroomsController.text),
-      'bathrooms': int.parse(_bathroomsController.text),
+      'bedrooms': _bedroomsController.text.isNotEmpty ? int.parse(_bedroomsController.text) : null,
+      'bathrooms': _bathroomsController.text.isNotEmpty ? int.parse(_bathroomsController.text) : null,
       'size_m2': _sizeM2Controller.text.isNotEmpty ? double.parse(_sizeM2Controller.text) : null,
       'rent_amount': double.parse(_rentAmountController.text),
-      'deposit_amount': double.parse(_depositAmountController.text),
+      'deposit_amount': _depositAmountController.text.isNotEmpty ? double.parse(_depositAmountController.text) : null,
       'is_available': _isAvailable ? 1 : 0,
       'photos': photos,
     };

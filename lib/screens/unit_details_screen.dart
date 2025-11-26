@@ -123,7 +123,7 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
                       Expanded(
                         child: _buildStatCard(
                           icon: Icons.king_bed,
-                          value: '${unit.bedrooms}',
+                          value: '${unit.bedrooms ?? 'N/A'}',
                           label: 'Bedrooms',
                           color: AppTheme.primaryColor,
                         ),
@@ -132,7 +132,7 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
                       Expanded(
                         child: _buildStatCard(
                           icon: Icons.bathtub,
-                          value: '${unit.bathrooms}',
+                          value: '${unit.bathrooms ?? 'N/A'}',
                           label: 'Bathrooms',
                           color: AppTheme.secondaryColor,
                         ),
@@ -169,19 +169,21 @@ class _UnitDetailsScreenState extends State<UnitDetailsScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Icon(Icons.account_balance_wallet, color: AppTheme.secondaryColor),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Security Deposit: KES ${unit.depositAmount.toStringAsFixed(0)}',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                        if (unit.depositAmount != null) ...[
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(Icons.account_balance_wallet, color: AppTheme.secondaryColor),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Security Deposit: KES ${unit.depositAmount!.toStringAsFixed(0)}',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                         if (unit.sizeM2 != null) ...[
                           const SizedBox(height: 8),
                           Row(

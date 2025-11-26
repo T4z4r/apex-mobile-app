@@ -79,11 +79,11 @@ class Unit {
   final int id;
   final int propertyId;
   final String unitLabel;
-  final int bedrooms;
-  final int bathrooms;
+  final int? bedrooms;
+  final int? bathrooms;
   final double? sizeM2;
   final double rentAmount;
-  final double depositAmount;
+  final double? depositAmount;
   final bool isAvailable;
   final List<String>? photos;
   final int? tenantId;
@@ -95,11 +95,11 @@ class Unit {
     required this.id,
     required this.propertyId,
     required this.unitLabel,
-    required this.bedrooms,
-    required this.bathrooms,
+    this.bedrooms,
+    this.bathrooms,
     this.sizeM2,
     required this.rentAmount,
-    required this.depositAmount,
+    this.depositAmount,
     required this.isAvailable,
     this.photos,
     this.tenantId,
@@ -127,7 +127,7 @@ class Unit {
       bathrooms: json['bathrooms'],
       sizeM2: json['size_m2'] != null ? double.parse(json['size_m2'].toString()) : null,
       rentAmount: double.parse(json['rent_amount'].toString()),
-      depositAmount: double.parse(json['deposit_amount'].toString()),
+      depositAmount: json['deposit_amount'] != null ? double.parse(json['deposit_amount'].toString()) : null,
       isAvailable: json['is_available'] == 1 || json['is_available'] == true,
       photos: photosList,
       tenantId: json['tenant_id'],
