@@ -21,6 +21,7 @@ import 'screens/register_screen.dart';
 import 'screens/tenant_navigation_screen.dart';
 import 'screens/landlord_navigation_screen.dart';
 import 'screens/agent_navigation_screen.dart';
+import 'screens/admin_navigation_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/units_screen.dart';
 import 'screens/properties_screen.dart';
@@ -98,6 +99,8 @@ class AuthWrapper extends StatelessWidget {
           return LandlordNavigationScreen();
         case 'agent':
           return AgentNavigationScreen();
+        case 'admin':
+          return AdminNavigationScreen();
         default:
           return TenantNavigationScreen(); // Default fallback
       }
