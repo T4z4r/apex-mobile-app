@@ -5,10 +5,11 @@ import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   // TODO: Update this URL to match your Laravel backend server
-  final String baseUrl =
-      "http://192.168.137.1:8000/api"; // For Android emulator
+  // final String baseUrl =
+  //     "http://192.168.137.1:8000/api"; // For Android emulator
   // For physical device or production, use your actual server IP/domain
   // Examples:
+  final String baseUrl = "http://localhost:8000/api"; // Local development
   // final String baseUrl = "http://192.168.1.100:8000/api"; // Local network IP
   // final String baseUrl = "https://your-api-domain.com/api"; // Production domain
 

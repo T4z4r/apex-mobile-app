@@ -75,8 +75,6 @@ class MyApp extends StatelessWidget {
         '/properties': (context) => PropertiesScreen(),
         '/leases': (context) => LeasesScreen(),
         // TODO: Add other routes as screens are created
-        // '/properties': (context) => PropertiesScreen(),
-        // '/leases': (context) => LeasesScreen(),
         // '/maintenance': (context) => MaintenanceScreen(),
         // '/agents': (context) => AgentsScreen(),
         // '/disputes': (context) => DisputesScreen(),
