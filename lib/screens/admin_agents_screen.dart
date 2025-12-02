@@ -102,12 +102,15 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                   items: const [
                     DropdownMenuItem(value: 'all', child: Text('All Agents')),
-                    DropdownMenuItem(value: 'verified', child: Text('Verified')),
-                    DropdownMenuItem(value: 'pending', child: Text('Pending Verification')),
+                    DropdownMenuItem(
+                        value: 'verified', child: Text('Verified')),
+                    DropdownMenuItem(
+                        value: 'pending', child: Text('Pending Verification')),
                   ],
                   onChanged: (value) {
                     setState(() => _selectedStatus = value!);
@@ -139,40 +142,58 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
                           itemCount: _agents.length,
                           itemBuilder: (context, index) {
                             final agent = _agents[index];
-                            final isVerified = agent['is_verified'] == true || agent['is_verified'] == 1;
+                            final isVerified = agent['is_verified'] == true ||
+                                agent['is_verified'] == 1;
 
                             return ModernCard(
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: isVerified ? AppTheme.successColor.withOpacity(0.1) : AppTheme.warningColor.withOpacity(0.1),
+                                  backgroundColor: isVerified
+                                      ? AppTheme.successColor.withOpacity(0.1)
+                                      : AppTheme.warningColor.withOpacity(0.1),
                                   child: Icon(
                                     isVerified ? Icons.verified : Icons.pending,
-                                    color: isVerified ? AppTheme.successColor : AppTheme.warningColor,
+                                    color: isVerified
+                                        ? AppTheme.successColor
+                                        : AppTheme.warningColor,
                                   ),
                                 ),
-                                title: Text(agent['user']?['name'] ?? 'Unknown Agent'),
+                                title: Text(
+                                    agent['user']?['name'] ?? 'Unknown Agent'),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Agency: ${agent['agency_name'] ?? 'N/A'}'),
-                                    Text('Email: ${agent['user']?['email'] ?? 'N/A'}'),
-                                    Text('Phone: ${agent['user']?['phone'] ?? 'N/A'}'),
+                                    Text(
+                                        'Agency: ${agent['agency_name'] ?? 'N/A'}'),
+                                    Text(
+                                        'Email: ${agent['user']?['email'] ?? 'N/A'}'),
+                                    Text(
+                                        'Phone: ${agent['user']?['phone'] ?? 'N/A'}'),
                                     if (agent['commission_rate'] != null)
-                                      Text('Commission: ${agent['commission_rate']}%'),
+                                      Text(
+                                          'Commission: ${agent['commission_rate']}%'),
                                     Row(
                                       children: [
                                         Text('Status: '),
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 2),
                                           decoration: BoxDecoration(
-                                            color: isVerified ? AppTheme.successColor.withOpacity(0.1) : AppTheme.warningColor.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: isVerified
+                                                ? AppTheme.successColor
+                                                    .withOpacity(0.1)
+                                                : AppTheme.warningColor
+                                                    .withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Text(
                                             isVerified ? 'Verified' : 'Pending',
                                             style: TextStyle(
-                                              color: isVerified ? AppTheme.successColor : AppTheme.warningColor,
+                                              color: isVerified
+                                                  ? AppTheme.successColor
+                                                  : AppTheme.warningColor,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -183,7 +204,8 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
                                   ],
                                 ),
                                 trailing: PopupMenuButton<String>(
-                                  onSelected: (value) => _handleAgentAction(value, agent),
+                                  onSelected: (value) =>
+                                      _handleAgentAction(value, agent),
                                   itemBuilder: (context) => [
                                     const PopupMenuItem(
                                       value: 'edit',
@@ -191,7 +213,9 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
                                     ),
                                     PopupMenuItem(
                                       value: isVerified ? 'unverify' : 'verify',
-                                      child: Text(isVerified ? 'Remove Verification' : 'Verify Agent'),
+                                      child: Text(isVerified
+                                          ? 'Remove Verification'
+                                          : 'Verify Agent'),
                                     ),
                                     const PopupMenuItem(
                                       value: 'delete',
@@ -228,8 +252,10 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
   }
 
   void _showEditAgentDialog(dynamic agent) {
-    final agencyController = TextEditingController(text: agent['agency_name'] ?? '');
-    final commissionController = TextEditingController(text: agent['commission_rate']?.toString() ?? '');
+    final agencyController =
+        TextEditingController(text: agent['agency_name'] ?? '');
+    final commissionController =
+        TextEditingController(text: agent['commission_rate']?.toString() ?? '');
 
     showDialog(
       context: context,
@@ -256,7 +282,8 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () => _updateAgent(agent['id'], agencyController.text, commissionController.text),
+            onPressed: () => _updateAgent(
+                agent['id'], agencyController.text, commissionController.text),
             child: const Text('Update'),
           ),
         ],
@@ -272,7 +299,8 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
           borderRadius: BorderRadius.circular(16),
         ),
         title: const Text('Delete Agent'),
-        content: Text('Are you sure you want to delete agent "${agent['user']?['name'] ?? 'Unknown'}"? This action cannot be undone.'),
+        content: Text(
+            'Are you sure you want to delete agent "${agent['user']?['name'] ?? 'Unknown'}"? This action cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -291,7 +319,8 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
     );
   }
 
-  Future<void> _updateAgent(int agentId, String agencyName, String commissionRate) async {
+  Future<void> _updateAgent(
+      int agentId, String agencyName, String commissionRate) async {
     Navigator.pop(context); // Close dialog
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -301,7 +330,8 @@ class _AdminAgentsScreenState extends State<AdminAgentsScreen> {
     try {
       final updateData = <String, dynamic>{};
       if (agencyName.isNotEmpty) updateData['agency_name'] = agencyName;
-      if (commissionRate.isNotEmpty) updateData['commission_rate'] = double.parse(commissionRate);
+      if (commissionRate.isNotEmpty)
+        updateData['commission_rate'] = double.parse(commissionRate);
 
       await _apiService.updateAdminAgent(token, agentId, updateData);
 

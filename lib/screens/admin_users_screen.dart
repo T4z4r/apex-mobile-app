@@ -49,18 +49,19 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         if (_searchController.text.isNotEmpty) 'search': _searchController.text,
       };
 
-      final usersData = await _apiService.getAdminUsers(token, query: query);
-      // Assuming the API returns a list directly, not paginated
-      final newUsers = usersData is List ? usersData : [];
+      final response = await _apiService.getAdminUsers(token, query: query) as Map<String, dynamic>;
+      final usersData = response['data'] as List<dynamic>;
+      final currentPage = int.tryParse(response['current_page'].toString()) ?? 1;
+      final lastPage = int.tryParse(response['last_page'].toString()) ?? 1;
 
       setState(() {
         if (refresh) {
-          _users = newUsers;
+          _users = usersData;
         } else {
-          _users.addAll(newUsers);
+          _users.addAll(usersData);
         }
-        // For now, assume no pagination
-        _hasMorePages = false;
+        _hasMorePages = currentPage < lastPage;
+        if (_hasMorePages) _currentPage++;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
