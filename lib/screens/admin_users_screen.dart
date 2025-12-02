@@ -94,6 +94,7 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         children: [
           // Search and Filter Bar
           Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.surfaceColor,
