@@ -49,9 +49,10 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         if (_searchController.text.isNotEmpty) 'search': _searchController.text,
       };
 
-      final response = await _apiService.getAdminUsers(token, query: query) as Map<String, dynamic>;
+      final response = await _apiService.getAdminUsers(token, query: query);
       final usersData = response['data'] as List<dynamic>;
-      final currentPage = int.tryParse(response['current_page'].toString()) ?? 1;
+      final currentPage =
+          int.tryParse(response['current_page'].toString()) ?? 1;
       final lastPage = int.tryParse(response['last_page'].toString()) ?? 1;
 
       setState(() {
@@ -94,7 +95,6 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         children: [
           // Search and Filter Bar
           Container(
-            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.surfaceColor,
@@ -136,7 +136,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     const SizedBox(width: 12),
                     ModernButton(
                       text: 'Roles',
-                      onPressed: () => _showRolesManagement(context, rolesProvider),
+                      onPressed: () =>
+                          _showRolesManagement(context, rolesProvider),
                       isOutlined: true,
                       height: 40,
                     ),
@@ -181,10 +182,15 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: AppTheme.primaryColor.withOpacity(0.1),
+                                  backgroundColor:
+                                      AppTheme.primaryColor.withOpacity(0.1),
                                   child: Text(
-                                    user['name']?.substring(0, 1).toUpperCase() ?? 'U',
-                                    style: TextStyle(color: AppTheme.primaryColor),
+                                    user['name']
+                                            ?.substring(0, 1)
+                                            .toUpperCase() ??
+                                        'U',
+                                    style:
+                                        TextStyle(color: AppTheme.primaryColor),
                                   ),
                                 ),
                                 title: Text(user['name'] ?? ''),
@@ -202,7 +208,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                                   ],
                                 ),
                                 trailing: PopupMenuButton<String>(
-                                  onSelected: (value) => _handleUserAction(value, user),
+                                  onSelected: (value) =>
+                                      _handleUserAction(value, user),
                                   itemBuilder: (context) => [
                                     const PopupMenuItem(
                                       value: 'edit',
@@ -282,7 +289,8 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
           borderRadius: BorderRadius.circular(16),
         ),
         title: const Text('Delete User'),
-        content: Text('Are you sure you want to delete ${user['name']}? This action cannot be undone.'),
+        content: Text(
+            'Are you sure you want to delete ${user['name']}? This action cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -370,14 +378,16 @@ class _AddUserDialogState extends State<AddUserDialog> {
               ModernTextField(
                 label: 'Full Name',
                 controller: _nameController,
-                validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Required' : null,
               ),
               const SizedBox(height: 12),
               ModernTextField(
                 label: 'Phone Number',
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Required' : null,
               ),
               const SizedBox(height: 12),
               ModernTextField(
@@ -390,7 +400,8 @@ class _AddUserDialogState extends State<AddUserDialog> {
                 label: 'Password',
                 controller: _passwordController,
                 obscureText: true,
-                validator: (value) => (value?.length ?? 0) < 8 ? 'Minimum 8 characters' : null,
+                validator: (value) =>
+                    (value?.length ?? 0) < 8 ? 'Minimum 8 characters' : null,
               ),
             ],
           ),
@@ -403,7 +414,9 @@ class _AddUserDialogState extends State<AddUserDialog> {
         ),
         ElevatedButton(
           onPressed: _isLoading ? null : _addUser,
-          child: _isLoading ? const CircularProgressIndicator() : const Text('Add User'),
+          child: _isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Add User'),
         ),
       ],
     );
@@ -424,7 +437,8 @@ class _AddUserDialogState extends State<AddUserDialog> {
       await apiService.createAdminUser(token, {
         'name': _nameController.text,
         'phone': _phoneController.text,
-        'email': _emailController.text.isNotEmpty ? _emailController.text : null,
+        'email':
+            _emailController.text.isNotEmpty ? _emailController.text : null,
         'password': _passwordController.text,
       });
 
@@ -454,7 +468,9 @@ class EditUserDialog extends StatefulWidget {
   final dynamic user;
   final VoidCallback onUserUpdated;
 
-  const EditUserDialog({Key? key, required this.user, required this.onUserUpdated}) : super(key: key);
+  const EditUserDialog(
+      {Key? key, required this.user, required this.onUserUpdated})
+      : super(key: key);
 
   @override
   _EditUserDialogState createState() => _EditUserDialogState();
@@ -489,14 +505,16 @@ class _EditUserDialogState extends State<EditUserDialog> {
               ModernTextField(
                 label: 'Full Name',
                 controller: _nameController,
-                validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Required' : null,
               ),
               const SizedBox(height: 12),
               ModernTextField(
                 label: 'Phone Number',
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                validator: (value) => value?.isEmpty ?? true ? 'Required' : null,
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Required' : null,
               ),
               const SizedBox(height: 12),
               ModernTextField(
@@ -515,7 +533,9 @@ class _EditUserDialogState extends State<EditUserDialog> {
         ),
         ElevatedButton(
           onPressed: _isLoading ? null : _updateUser,
-          child: _isLoading ? const CircularProgressIndicator() : const Text('Update'),
+          child: _isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Update'),
         ),
       ],
     );
@@ -536,7 +556,8 @@ class _EditUserDialogState extends State<EditUserDialog> {
       await apiService.updateAdminUser(token, widget.user['id'], {
         'name': _nameController.text,
         'phone': _phoneController.text,
-        'email': _emailController.text.isNotEmpty ? _emailController.text : null,
+        'email':
+            _emailController.text.isNotEmpty ? _emailController.text : null,
       });
 
       Navigator.pop(context);
@@ -608,7 +629,9 @@ class _AssignRoleDialogState extends State<AssignRoleDialog> {
         ),
         ElevatedButton(
           onPressed: _isLoading || _selectedRole == null ? null : _assignRole,
-          child: _isLoading ? const CircularProgressIndicator() : const Text('Assign'),
+          child: _isLoading
+              ? const CircularProgressIndicator()
+              : const Text('Assign'),
         ),
       ],
     );
@@ -626,7 +649,8 @@ class _AssignRoleDialogState extends State<AssignRoleDialog> {
     final ApiService apiService = ApiService();
 
     try {
-      await apiService.assignRoleToUser(token, widget.user['id'], _selectedRole!);
+      await apiService.assignRoleToUser(
+          token, widget.user['id'], _selectedRole!);
 
       Navigator.pop(context);
       widget.onRoleAssigned();
@@ -653,7 +677,8 @@ class _AssignRoleDialogState extends State<AssignRoleDialog> {
 class RolesManagementSheet extends StatelessWidget {
   final RolesProvider rolesProvider;
 
-  const RolesManagementSheet({Key? key, required this.rolesProvider}) : super(key: key);
+  const RolesManagementSheet({Key? key, required this.rolesProvider})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -692,9 +717,11 @@ class RolesManagementSheet extends StatelessWidget {
                             margin: const EdgeInsets.only(bottom: 12),
                             child: ListTile(
                               title: Text(role.name),
-                              subtitle: Text('${role.permissions?.length ?? 0} permissions'),
+                              subtitle: Text(
+                                  '${role.permissions?.length ?? 0} permissions'),
                               trailing: PopupMenuButton<String>(
-                                onSelected: (value) => _handleRoleAction(context, value, role),
+                                onSelected: (value) =>
+                                    _handleRoleAction(context, value, role),
                                 itemBuilder: (context) => [
                                   const PopupMenuItem(
                                     value: 'edit',
