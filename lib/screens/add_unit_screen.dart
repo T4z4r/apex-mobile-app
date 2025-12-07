@@ -61,17 +61,21 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                     fillColor: AppTheme.surfaceColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppTheme.dividerColor),
+                      borderSide:
+                          const BorderSide(color: AppTheme.dividerColor),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppTheme.dividerColor),
+                      borderSide:
+                          const BorderSide(color: AppTheme.dividerColor),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
+                      borderSide: const BorderSide(
+                          color: AppTheme.primaryColor, width: 2),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
                   ),
                   items: propertiesProvider.properties.map((property) {
                     return DropdownMenuItem<Property>(
@@ -114,7 +118,9 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _bedroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -129,7 +135,9 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _bathroomsController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value != null && value.isNotEmpty && int.tryParse(value) == null) {
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              int.tryParse(value) == null) {
                             return 'Invalid number';
                           }
                           return null;
@@ -155,7 +163,10 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _rentAmountController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value != null && value.isNotEmpty && double.tryParse(value) == null) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter rent amount';
+                          }
+                          if (double.tryParse(value) == null) {
                             return 'Invalid amount';
                           }
                           return null;
@@ -170,10 +181,9 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                         controller: _depositAmountController,
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
-                          if (double.tryParse(value) == null) {
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              double.tryParse(value) == null) {
                             return 'Invalid amount';
                           }
                           return null;
@@ -254,12 +264,20 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
 
     final unitData = {
       'unit_label': _unitLabelController.text,
-      'bedrooms': _bedroomsController.text.isNotEmpty ? int.parse(_bedroomsController.text) : null,
-      'bathrooms': _bathroomsController.text.isNotEmpty ? int.parse(_bathroomsController.text) : null,
-      'size_m2': _sizeM2Controller.text.isNotEmpty ? double.parse(_sizeM2Controller.text) : null,
+      'bedrooms': _bedroomsController.text.isNotEmpty
+          ? int.parse(_bedroomsController.text)
+          : null,
+      'bathrooms': _bathroomsController.text.isNotEmpty
+          ? int.parse(_bathroomsController.text)
+          : null,
+      'size_m2': _sizeM2Controller.text.isNotEmpty
+          ? double.parse(_sizeM2Controller.text)
+          : null,
       'rent_amount': double.parse(_rentAmountController.text),
-      'deposit_amount': _depositAmountController.text.isNotEmpty ? double.parse(_depositAmountController.text) : null,
-      'is_available': _isAvailable ? 1 : 0,
+      'deposit_amount': _depositAmountController.text.isNotEmpty
+          ? double.parse(_depositAmountController.text)
+          : null,
+      'is_available': _isAvailable,
       'photos': photos,
     };
 
